@@ -1,5 +1,6 @@
 import Player from '@vimeo/player';
 import throttle from 'lodash.throttle';
+import { save, load } from './storage';
 
 const CURRENT_TIME_KEY = 'videoplayer-current-time';
 
@@ -7,17 +8,16 @@ const iframe = document.querySelector('iframe');
 const player = new Player(iframe);
 
 const onTimeupdate = function (data) {
-  localStorage.setItem(CURRENT_TIME_KEY, JSON.stringify(data));
+  save(CURRENT_TIME_KEY, data);
 };
 
-player.on('timeupdate', throttle(onTimeupdate, 250));
+player.on('timeupdate', throttle(onTimeupdate, 1000));
 
-const savedData = localStorage.getItem(CURRENT_TIME_KEY);
-const parsedData = JSON.parse(savedData);
+const savedData = load(CURRENT_TIME_KEY);
 
 if (savedData) {
   player
-    .setCurrentTime(parsedData.seconds)
+    .setCurrentTime(savedData.seconds)
     .then(function (seconds) {
       // seconds = the actual time that the player seeked to
     })
