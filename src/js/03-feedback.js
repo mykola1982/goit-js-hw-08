@@ -21,6 +21,13 @@ function onFormInput(evt) {
 
 function onFormSubmit(evt) {
   evt.preventDefault();
+
+  const {
+    elements: { email, message },
+  } = evt.currentTarget;
+
+  console.log({ email: email.value, message: message.value });
+
   evt.currentTarget.reset();
   remove(LOCALE_STORAGE_KEY);
 }
